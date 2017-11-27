@@ -1,10 +1,56 @@
 html
 	head
+		style.
+			body{
+			margin:0;
+			padding:0;
+
+			}
+			.container{
+			margin: auto;
+			
+			}
+			li.body {
+			 list-style-type:none;
+			 text-align: center;
+			 border-style: dashed;
+			 margin-bottom: 1%;
+
+			}
+			form {
+			text-align: center;
+			margin: 1%;
+			padding: 1%;
+			}
+
+			h1{
+			text-align: center;
+			margin: 1%
+			}
+
+			input{
+			text-align: center;
+			border-style: solid;
+			}
+
+			ul.lijst{
+			width: 50%;
+			margin: auto;
+			padding:0%;
+						}
 		script(src="https://code.jquery.com/jquery-3.2.1.js"
 			  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
 			  crossorigin="anonymous")
 	body
 		include nav
-		h1 Messages
+		div(id="container")
+			h1 Messages
+			//- form(method ="POST" action="search")
+			//- 	input(type= "text" id="search" name="search" placeholder="search here")
+
+		div(id="container")
 			-for(var i = 0; i < lijst.length; i++)
-				li #{lijst[i].title}, #{lijst[i].body}
+					ul.lijst
+						li.body 
+							h3 #{lijst[i].title}
+							p #{lijst[i].body}

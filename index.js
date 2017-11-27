@@ -40,18 +40,57 @@ client.query(query, (err,res)=> {
 })*/
 
 app.post("/input", (req, res) => {
+    var user1 = req.body.name
     var title1 = req.body.title
     var message1 = req.body.message
+  /*  var arryuser= []
+
+    function arraycheck(){
+    	for (var i = 0; i < arryuser.length; i++) {
+    		if (req.body.name===arryuser[i]) {
+    			return i
+    		} else {
+    			arryuser.push(req.body.name)
+    		}
+    		var list = arryuser.length
+    	}
+
+    }
+*/
 
     client.connect()
     const query = {
         text: `insert into messages (title, body) values 
 		('${title1}','${message1}');`
     }
+
+/*    const query2 = {
+        text: `insert into users (username) values 
+		('${user1}');`
+    }  
+   
+    const query3 = {
+        text: `ALTER TABLE messages add column user_id integer REFERENCES users(username);`
+    }    
+*/
+
     client.query(query, (err, res) => {
         console.log("succes")
 
     })
+    
+/*    client.query(query2, (err, res) => {
+        console.log("succes")
+
+    })
+
+    client.query(query3, (err, res) => {
+        console.log("succes")
+
+    })
+*/
+
+
     res.redirect("read")
 })
 
@@ -85,3 +124,7 @@ app.get("/read", (req, results) => {
 app.listen(3000, function() {
     console.log("find me @ 3k")
 })
+
+// search bar op page 2 select * for bodyparser, value adden op foreign key
+// key toeschrijven aan usernames.  stuur reqs naar array, comparay array 
+// anders insert nummer 
