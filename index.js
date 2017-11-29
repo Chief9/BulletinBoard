@@ -19,23 +19,6 @@ const client = new Client({
     port: 5432,
 })
 
-const client2 = new Client({
-
-    user: process.env.POSTGRES_USER,
-    host: process.env.host,
-    database: process.env.database,
-    password: process.env.POSTGRES_PASSWORD,
-    port: 5432,
-})
-
-const client3 = new Client({
-
-    user: process.env.POSTGRES_USER,
-    host: process.env.host,
-    database: process.env.database,
-    password: process.env.POSTGRES_PASSWORD,
-    port: 5432,
-})
 
 var connectionString = 'postgres://' + process.env.POSTGRES_USER + ':' + process.env.POSTGRES_PASSWORD + '@process.env.host/process.env.database';
 
@@ -79,12 +62,12 @@ app.get("/", (req, res) => {
 
 app.get("/read", (req, results) => {
 
-    client2.connect()
+    
     const query = {
         text: "select * from messages"
     }
 
-    client2.query(query)
+    client.query(query)
     .then  ((res) => {
         var lijst = res.rows
         results.render("read", {
@@ -97,12 +80,12 @@ app.get("/read", (req, results) => {
 })
 
 app.post("/search", (req,results) => {
-        client3.connect()
+        client.connect()
         const query = {
             text: `select * from messages where user_id = (select (id) from users where username = '${req.body.search}' );`
         }
 
-        client3.query(query)
+        client.query(query)
         .then ((res) => {
             var lijst = res.rows
             results.render("read", {
