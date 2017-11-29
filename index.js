@@ -28,72 +28,49 @@ const client2 = new Client({
     port: 5432,
 })
 
-var connectionString = 'postgres://' + process.env.POSTGRES_USER + ':' + process.env.POSTGRES_PASSWORD + '@process.env.host/process.env.database';
-/*
-client.connect()
-const query = {
-	text: `select * from users where name = '${process.argv[2]}'`,
-}
-client.query(query, (err,res)=> { 
-	console.log(res)
-		client.end()
-})*/
+const client3 = new Client({
 
-app.post("/input", (req, res) => {
-    var user1 = req.body.name
-    var title1 = req.body.title
-    var message1 = req.body.message
-  /*  var arryuser= []
-
-    function arraycheck(){
-    	for (var i = 0; i < arryuser.length; i++) {
-    		if (req.body.name===arryuser[i]) {
-    			return i
-    		} else {
-    			arryuser.push(req.body.name)
-    		}
-    		var list = arryuser.length
-    	}
-
-    }
-*/
-
-    client.connect()
-    const query = {
-        text: `insert into messages (title, body) values 
-		('${title1}','${message1}');`
-    }
-
-/*    const query2 = {
-        text: `insert into users (username) values 
-		('${user1}');`
-    }  
-   
-    const query3 = {
-        text: `ALTER TABLE messages add column user_id integer REFERENCES users(username);`
-    }    
-*/
-
-    client.query(query, (err, res) => {
-        console.log("succes")
-
-    })
-    
-/*    client.query(query2, (err, res) => {
-        console.log("succes")
-
-    })
-
-    client.query(query3, (err, res) => {
-        console.log("succes")
-
-    })
-*/
-
-
-    res.redirect("read")
+    user: process.env.POSTGRES_USER,
+    host: process.env.host,
+    database: process.env.database,
+    password: process.env.POSTGRES_PASSWORD,
+    port: 5432,
 })
 
+var connectionString = 'postgres://' + process.env.POSTGRES_USER + ':' + process.env.POSTGRES_PASSWORD + '@process.env.host/process.env.database';
+
+    client.connect()
+
+app.post("/input", (req, res) => {
+
+ const query1 = {
+      text: `select * from users where username = '${req.body.name}';`
+   }
+
+   const query2 = {
+      text: `insert into users (username) values ('${req.body.name}');`
+   }
+
+   const query3 = {
+       text: `insert into messages (title,body,username,user_id) SELECT '${req.body.title}','${req.body.message}', '${req.body.name}', users.id FROM users WHERE users.username = '${req.body.name}';`
+   }
+  client.query(query1)
+    .then ((result)  => {
+    if (result.rows.length !== 0){
+           client.query(query3) 
+            .then ((result) => {  
+           })
+       } else {   
+           client.query(query2)
+            .then  ((result) => {
+              client.query(query3)
+                .then ((result) => {  
+               })
+           })
+       }
+   })
+   res.redirect("read")
+})
 
 app.get("/", (req, res) => {
     res.render("index")
@@ -107,12 +84,11 @@ app.get("/read", (req, results) => {
         text: "select * from messages"
     }
 
-    client2.query(query, (err, res) => {
+    client2.query(query)
+    .then  ((res) => {
         var lijst = res.rows
-        console.log(res.rows)
         results.render("read", {
             lijst: lijst
-
         })
 
     })
@@ -120,11 +96,23 @@ app.get("/read", (req, results) => {
 
 })
 
+app.post("/search", (req,results) => {
+        client3.connect()
+        const query = {
+            text: `select * from messages where user_id = (select (id) from users where username = '${req.body.search}' );`
+        }
+
+        client3.query(query)
+        .then ((res) => {
+            var lijst = res.rows
+            results.render("read", {
+            lijst: lijst
+        })
+        })
+})
+
 
 app.listen(3000, function() {
     console.log("find me @ 3k")
 })
 
-// search bar op page 2 select * for bodyparser, value adden op foreign key
-// key toeschrijven aan usernames.  stuur reqs naar array, comparay array 
-// anders insert nummer 

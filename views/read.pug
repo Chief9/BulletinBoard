@@ -38,6 +38,11 @@ html
 			margin: auto;
 			padding:0%;
 						}
+
+			h5{
+			margin: 1%;
+			text-align:right;
+			}
 		script(src="https://code.jquery.com/jquery-3.2.1.js"
 			  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
 			  crossorigin="anonymous")
@@ -45,8 +50,9 @@ html
 		include nav
 		div(id="container")
 			h1 Messages
-			//- form(method ="POST" action="search")
-			//- 	input(type= "text" id="search" name="search" placeholder="search here")
+			form(method ="POST" action="search")
+				input(type= "text" id="search" name="search" placeholder="search here")
+				button(id="click" type="submit" value="submit") Search
 
 		div(id="container")
 			-for(var i = 0; i < lijst.length; i++)
@@ -54,3 +60,4 @@ html
 						li.body 
 							h3 #{lijst[i].title}
 							p #{lijst[i].body}
+							h5 By: #{lijst[i].username}
